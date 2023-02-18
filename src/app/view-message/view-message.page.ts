@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Platform } from '@ionic/angular';
 import { DataService, Message } from '../services/data.service';
 
 @Component({
@@ -8,9 +9,10 @@ import { DataService, Message } from '../services/data.service';
   styleUrls: ['./view-message.page.scss'],
 })
 export class ViewMessagePage implements OnInit {
-  public message!: Message;
+  message?: Message;
 
   constructor(
+    private platform: Platform,
     private data: DataService,
     private activatedRoute: ActivatedRoute
   ) { }
@@ -23,6 +25,6 @@ export class ViewMessagePage implements OnInit {
   getBackButtonText() {
     const win = window as any;
     const mode = win && win.Ionic && win.Ionic.mode;
-    return mode === 'ios' ? 'Inbox' : '';
+    return this.platform.is('ios') ? 'Inbox' : '';
   }
 }

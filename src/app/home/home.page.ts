@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RefresherCustomEvent } from '@ionic/angular';
 
 import { DataService, Message } from '../services/data.service';
@@ -8,17 +8,25 @@ import { DataService, Message } from '../services/data.service';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
-  constructor(private data: DataService) { }
+export class HomePage implements OnInit {
+
+  messages$ = this.dataService.messages$;
+  constructor(private dataService: DataService) { }
+
+  ngOnInit(): void {
+    this.fetch();
+  }
 
   refresh(ev: any) {
-    setTimeout(() => {
+    this.fetch().finally(()=>{
       (ev as RefresherCustomEvent).detail.complete();
-    }, 3000);
+    })
   }
 
-  getMessages(): Message[] {
-    return this.data.getMessages();
-  }
+  private fetch(): Promise<void>{
+    return this.dataService.fetchMessages();
+  };
+
+
 
 }
